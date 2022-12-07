@@ -18,10 +18,10 @@ public class Owner extends Users {
 
     public void ownerMenu(){
 
-        System.out.println("Select an select: ");
-        System.out.println("Add books (1) ");
-        System.out.println("Delete books (2) ");
-        System.out.println("Generate Reports (3) ");
+        System.out.println("Select an select:");
+        System.out.println("Add books, enter 1");
+        System.out.println("Delete books, enter 2");
+        System.out.println("Generate Reports, enter 3");
 
         if (select.nextInt() == 1){
             System.out.println("What is the ISBN of the book you want to add to the store?");

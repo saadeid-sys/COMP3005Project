@@ -41,6 +41,7 @@ public class main {
 
             } catch (SQLException sqle) {
                 System.out.println("Could not find user " + sqle);
+                System.out.println("createuser");
             }
 
         } catch (Exception sqle){
@@ -61,7 +62,7 @@ public class main {
                 result = statement.executeQuery(
                         "select type_of_user from users where username = ('" + username + "') and password = ('" + password + "')");
                 result.next();
-                type = result.getString("type");
+                type = result.getString("type_of_user");
 
                 if(type.equals(cust)){ //if it's a customer we show certain menu
                     System.out.println("Welcome Customer! \n");
@@ -75,6 +76,7 @@ public class main {
 
             } catch (SQLException sqle) {
                 System.out.println("Could not find user " + sqle);
+                System.out.println("loginuser");
             }
 
         } catch (Exception sqle){
@@ -97,7 +99,7 @@ public class main {
             System.out.println("Enter Password: \n");
             String password = login.nextLine();
             loginUser(userName, password);
-        }else{
+        }else if (input.nextInt() == 2){
             createUser();
         }
     }
