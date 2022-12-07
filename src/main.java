@@ -15,29 +15,29 @@ public class main {
         ) {
             try {
                 System.out.println("Please enter a username:");
-                String userName = input.nextLine();
+                String username = input.nextLine();
                 System.out.println("Please enter your password: ");
-                String passWord = input.nextLine();
+                String password = input.nextLine();
                 System.out.println("What is your name?");
                 String name = input.nextLine();
                 System.out.println("What is your email? ");
-                String email = input.nextLine();
+                String emailAddress = input.nextLine();
                 System.out.println("What is you address?");
                 String address = input.nextLine();
-                System.out.println("What is your phone number? ");
-                String phone = input.nextLine();
+                System.out.println("What is your phoneNumber number? ");
+                String phoneNumber = input.nextLine();
                 System.out.println("If you are a customer, enter 1. If you are an owner, enter 2");
 
-                String userType = " ";
+                String typeOfUser = " ";
                 if(input.nextInt() == 1){
-                    userType = "customer";
+                    typeOfUser = "customer";
                 }else if(input.nextInt() == 2) {
-                    userType = "owner";
+                    typeOfUser = "owner";
                 }
 
-                statement.executeUpdate("insert into users values ('" + name + "', '" + userName + "','" + passWord + "','" + email + "','" + address + "','" + phone + "','" + userType + "');");
+                statement.executeUpdate("insert into users values ('" + name + "', '" + emailAddress + "','" + address + "','" + phoneNumber + "','" + username + "','" + password + "','" + typeOfUser + "');");
                 System.out.println("\nCongratulations! You have created your profile! You will now be redirected to the store.\n");
-                loginUser(userName, passWord);
+                loginUser(username, password);
 
             } catch (SQLException sqle) {
                 System.out.println("Could not find user " + sqle);
@@ -59,24 +59,18 @@ public class main {
         ) {
             try {
                 result = statement.executeQuery(
-                        "select type from users where username = ('" + username + "') and password = ('" + password + "')");
+                        "select type_of_user from users where username = ('" + username + "') and password = ('" + password + "')");
                 result.next();
                 type = result.getString("type");
 
                 if(type.equals(cust)){ //if it's a customer we show certain menu
-
                     System.out.println("Welcome Customer! \n");
-
                     Consumer c = new Consumer(statement,connection, username);
                     c.customerMenu();
-
                 } else { // owner/manager // if it's a manager we show another menu
-
                     System.out.println("Welcome Owner! \n");
-
                     Owner o = new Owner(statement, connection, username);
                     o.ownerMenu();
-
                 }
 
             } catch (SQLException sqle) {

@@ -2,7 +2,6 @@ import java.util.Scanner;
 import java.sql.*;
 
 public class Owner extends Users {
-
     Statement statement;
     Connection connection;
     String username;
@@ -43,17 +42,17 @@ public class Owner extends Users {
 
     public void addBooks(int ISBN, int numBooks){
 
-        ResultSet result1;
+        ResultSet res;
 
         try  {
             result = statement.executeQuery(
                     "select * from book where ISBN = '" + ISBN + "';");
 
             if(result.next()){
-                result1 = statement.executeQuery("select quantity from inventory where ISBN = '" + ISBN + "';");
-                if(result1.next()){
-                    int quantityInventory = result1.getInt("quantity") + numBooks;
-                    statement.executeUpdate("update inventory set quantity = '" + quantityInventory + "' where ISBN = '" + ISBN + "';");
+                res = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
+                if(res.next()){
+                    int quantityInventory = res.getInt("book_quantity") + numBooks;
+                    statement.executeUpdate("update inventory set book_quantity = '" + quantityInventory + "' where ISBN = '" + ISBN + "';");
                 }
                 //must then pay the publisher
                 payPublisher(ISBN, numBooks);
@@ -98,10 +97,10 @@ public class Owner extends Users {
                 int bNum = input.nextInt();
 
 
-                statement.executeUpdate("insert into publisher values ('" + pub_name + "'," + pub_id + ",'" + address+"', '" + email + "','" + phoneNum + "'," + bNum + ");");
-                statement.executeUpdate("insert into book_info values ('" + title + "','" + author + "', '" + genre + "');");
-                statement.executeUpdate("insert into book values ('" + title + "', '" + newIsbn + "'," + numPages + "," + price + ", '" + pub_id + "'," + 0 + "," + pub_fee + ");" );
-                statement.executeUpdate("insert into inventory values ('" + title + "', '"+newIsbn+"'," + amount + "," +threshold+");");
+                statement.executeUpdate("insert into publisher values ('" + pub_name + "'," + pub_id + ",'" + email + "','" + address+"', '"  + phoneNum + "'," + bNum + ");");
+                statement.executeUpdate("insert into book_data values ('" + title + "','" + author + "', '" + genre + "');");
+                statement.executeUpdate("insert into book values ('" + newIsbn + "', '" + title + "'," + numPages + "," + price + ", '" + pub_id + "'," + 0 + "," + pub_fee + ");" );
+                statement.executeUpdate("insert into inventory values ('" + newIsbn + "', '"+title+"'," + amount + "," +threshold+");");
                 payPublisher(newIsbn, amount);
                 ownerMenu();
             }
@@ -121,12 +120,12 @@ public class Owner extends Users {
 
         try{
 
-            result = statement.executeQuery("select quantity from inventory where ISBN = '" + ISBN + "';");
+            result = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
             if(result.next()){
                 if(result.getInt("quantity") >= numBooks) {
-                    statement.executeUpdate("update inventory set quantity = " + numBooks + ";");
+                    statement.executeUpdate("update inventory set book_quantity = " + numBooks + ";");
                 } else{
-                    statement.executeUpdate("update inventory set quantity = " + 0 + ";");
+                    statement.executeUpdate("update inventory set book_quantity = " + 0 + ";");
                 }
             }
         }
@@ -163,15 +162,13 @@ public class Owner extends Users {
         double totalSales = 0;
 
         try  {
-
-            result = statement.executeQuery("select * from book natural join (select * from book_info where author_name = '" + author + "')");
+            result = statement.executeQuery("select * from book natural join (select * from book_data where author_name = '" + author + "')");
 
             while (result.next()){
                 totalSales += result.getDouble("price")*result.getInt("amount_sold");
             }
 
             System.out.println("The total sales for the author, " + author + " is $" + totalSales);
-
             ownerMenu();
 
         } catch (SQLException sqle) {
@@ -189,14 +186,13 @@ public class Owner extends Users {
 
         try  {
 
-            result = statement.executeQuery("select order_total_price from orders_info where date >= '" + fD + "' and date <= '" + sD + "';");
+            result = statement.executeQuery("select order_total from orders_data where date >= '" + fD + "' and date <= '" + sD + "';");
 
             while (result.next()){
                 totalSales += result.getDouble("order_total_price");
             }
 
             System.out.println("The Sales between " + fD + " and " + sD + " is $" + totalSales);
-
             ownerMenu();
 
         } catch (SQLException sqle) {
@@ -217,11 +213,11 @@ public class Owner extends Users {
         int accountNum;
 
         try  {
-            result = statement.executeQuery("select publisher_fee, publisher_id from book where ISBN = '" + ISBN + "';");
+            result = statement.executeQuery("select publisher_fee, p_id from book where ISBN = '" + ISBN + "';");
             if(result.next()) {
                 fee = result.getDouble("publisher_fee");
                 total = fee * (double) num_books;
-                result1 = statement.executeQuery("select bank_account_number from publisher where publisher_id = '" + result.getString("publisher_id") + "';");
+                result1 = statement.executeQuery("select bank_account_number from publisher where p_id = '" + result.getString("p_id") + "';");
                 if(result1.next()) {
                     accountNum = result1.getInt("bank_account_number");
                     System.out.println("\n*Publisher with account number '" + accountNum + "' was paid $" + total + "*\n");
