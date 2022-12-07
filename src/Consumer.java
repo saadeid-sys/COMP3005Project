@@ -10,8 +10,6 @@ public class Consumer extends Users{
     Connection connection;
     ResultSet result = null;
     Scanner input, select;
-//    Scanner input = new Scanner(System.in); //scan for strings
-//    Scanner select = new Scanner(System.in); //scan for ints
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd ");
     LocalDateTime now = LocalDateTime.now();
 
@@ -19,18 +17,18 @@ public class Consumer extends Users{
         this.statement = statement;
         this.connection = connection;
         this.username = username;
-        input = new Scanner(System.in); //scan for strings
-        select = new Scanner(System.in); //scan for ints
+        input = new Scanner(System.in);
+        select = new Scanner(System.in);
     }
 
     public void customerMenu(){
 
-        System.out.println("Select an select: ");
-        System.out.println("Search a book (1) ");
-        System.out.println("Buy a book (2) ");
-        System.out.println("Check Orders (3) ");
-        System.out.println("Checkout Cart (4) ");
-//        System.out.println("Exit (5)");
+        System.out.println("Select one of the following options: ");
+        System.out.println("Search a book, enter 1 ");
+        System.out.println("Buy a book, enter 2 ");
+        System.out.println("Check Orders, enter 3 ");
+        System.out.println("Checkout Cart enter, 4 ");
+        System.out.println("Exit, enter 5 ");
 
         if(select.nextInt() == 1){
             searchBook();
@@ -40,41 +38,34 @@ public class Consumer extends Users{
             checkOrders();
         }else if(select.nextInt() == 4){
             checkoutCart(username);
+        }else if(select.nextInt() == 5){
+            System.exit(0);
         }
-//        else if(select.nextInt() == 5){
-//            System.exit(0);
-//        }
     }
 
     public void searchBook(){
 
-        System.out.println("How would you like to search?");
-        System.out.println("Search by Title (1) ");
-        System.out.println("Search by ISBN (2) ");
-        System.out.println("Search by Author (3) ");
-        System.out.println("Search by Genre (4) ");
-        System.out.println("Return to previous menu (5) ");
+        System.out.println("Select the way you would like to search?");
+        System.out.println("Search by Title, enter 1 ");
+        System.out.println("Search by ISBN, enter 2 ");
+        System.out.println("Search by Author, enter 3 ");
+        System.out.println("Search by Genre, enter 4 ");
+        System.out.println("Return to previous menu, enter 5 ");
 
-        switch (select.nextInt()){
-            case 1:
-                System.out.println("What is the title you are looking for?");
-                searchByTitle(input.nextLine());
-                break;
-            case 2:
-                System.out.println("What is the ISBN Number (7 digits) ?");
-                searchByISBN(select.nextInt());
-                break;
-            case 3:
-                System.out.println("What is the author you are looking for?");
-                searchByAuthor(input.nextLine());
-                break;
-            case 4:
-                System.out.println("What is the genre you are looking for?");
-                searchByGenre(input.nextLine());
-                break;
-            case 5:
-                customerMenu();
-                break;
+        if(select.nextInt() == 1){
+            System.out.println("What is the title you are looking for?");
+            searchByTitle(input.nextLine());
+        }else if(select.nextInt() == 2){
+            System.out.println("What is the ISBN Number (7 digits) ?");
+            searchByISBN(select.nextInt());
+        }else if(select.nextInt() == 3){
+            System.out.println("What is the author you are looking for?");
+            searchByAuthor(input.nextLine());
+        }else if(select.nextInt() == 3){
+            System.out.println("What is the genre you are looking for?");
+            searchByGenre(input.nextLine());
+        }else{
+            customerMenu();
         }
     }
 
@@ -93,20 +84,10 @@ public class Consumer extends Users{
             }
 
             System.out.println("Would you like to purchase a book?");
-            System.out.println("Yes (1)");
-            System.out.println("No, continue searching (2)");
-            System.out.println("Return to main menu (3)");
-            switch (select.nextInt()){
-                case 1:
-                    buyBook();
-                    break;
-                case 2:
-                    searchBook();
-                    break;
-                case 3:
-                    customerMenu();
-                    break;
-            }
+            System.out.println("Yes, enter 1");
+            System.out.println("No (continue searching), enter 2");
+            System.out.println("Return to main menu, enter 3");
+            selectOption(select.nextInt());
         }
         catch (SQLException sqle) {
             System.out.println("Could not find book " + bookTitle + sqle);
@@ -131,20 +112,10 @@ public class Consumer extends Users{
                 System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
-            System.out.println("Yes (1)");
-            System.out.println("No, continue searching (2)");
-            System.out.println("Return to main menu (3)");
-            switch (select.nextInt()){
-                case 1:
-                    buyBook();
-                    break;
-                case 2:
-                    searchBook();
-                    break;
-                case 3:
-                    customerMenu();
-                    break;
-            }
+            System.out.println("Yes, enter 1");
+            System.out.println("No (continue searching), enter 2");
+            System.out.println("Return to main menu, enter 3");
+            selectOption(select.nextInt());
         }
         catch (SQLException sqle) {
             System.out.println("Could not find book with ISBN number: " + ISBN);
@@ -169,20 +140,10 @@ public class Consumer extends Users{
                 System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
-            System.out.println("Yes (1)");
-            System.out.println("No, continue searching (2)");
-            System.out.println("Return to main menu (3)");
-            switch (select.nextInt()){
-                case 1:
-                    buyBook();
-                    break;
-                case 2:
-                    searchBook();
-                    break;
-                case 3:
-                    customerMenu();
-                    break;
-            }
+            System.out.println("Yes, enter 1");
+            System.out.println("No (continue searching), enter 2");
+            System.out.println("Return to main menu, enter 3");
+            selectOption(select.nextInt());
         }
         catch (SQLException sqle) {
             System.out.println("Could not find books by: " + author);
@@ -206,21 +167,12 @@ public class Consumer extends Users{
                 System.out.println("Number of Pages: " + result.getString("num_pages"));
                 System.out.println("Price: $" + result.getString("price") + "\n");
             }
+
             System.out.println("Would you like to purchase a book?");
-            System.out.println("Yes (1)");
-            System.out.println("No, continue searching (2)");
-            System.out.println("Return to main menu (3)");
-            switch (select.nextInt()){
-                case 1:
-                    buyBook();
-                    break;
-                case 2:
-                    searchBook();
-                    break;
-                case 3:
-                    customerMenu();
-                    break;
-            }
+            System.out.println("Yes, enter 1");
+            System.out.println("No (continue searching), enter 2");
+            System.out.println("Return to main menu, enter 3");
+            selectOption(select.nextInt());
         }
         catch (SQLException sqle) {
             System.out.println("Could not find books with the genre: " + genre);
@@ -230,17 +182,24 @@ public class Consumer extends Users{
         }
     }
 
-    public void buyBook() {
+    public void selectOption(int option){
+        if (option == 1){
+            buyBook();
+        }else if (option == 2){
+            searchBook();
+        }else if (option == 3){
+            customerMenu();
+        }
+    }
 
+    public void buyBook() {
         System.out.println("What is the book ISBN?");
         Scanner input = new Scanner(System.in);
         String bookISBN = input.nextLine();
         System.out.println("How many would you like to purchase?");
         int quantity = input.nextInt();
 
-
         try {
-
             result = statement.executeQuery("select ISBN from book where ISBN = '" + bookISBN + "';"); //check to see if the book exists
             if(result.next()){
                 result = statement.executeQuery("select quantity from inventory where ISBN = '" + bookISBN + "'");
@@ -308,20 +267,18 @@ public class Consumer extends Users{
             }
 
             System.out.println("What would you like to do?");
-            System.out.println("Create Order (1) ");
-            System.out.println("Continue shopping (2)");
-            System.out.println("Remove an Item from Cart (3)");
+            System.out.println("Create Order, enter 1");
+            System.out.println("Continue shopping, enter 2");
+            System.out.println("Remove an Item from Cart, enter 3");
 
-            switch (select.nextInt()){
-                case 1:
-                    createOrder(userName);
-                case 2:
-                    customerMenu();
-                case 3:
-                    System.out.println("What is the book title of the book you would like to remove?");
-                    String bookTitle = input.nextLine();
-                    removeFromCart(bookTitle);
-                    break;
+            if(select.nextInt() == 1){
+                createOrder(userName);
+            }else if(select.nextInt() == 2){
+                customerMenu();
+            }else if(select.nextInt() == 3){
+                System.out.println("What is the book title of the book you would like to remove?");
+                String bookTitle = input.nextLine();
+                removeFromCart(bookTitle);
             }
 
         }  catch (SQLException sqle) {
@@ -342,11 +299,9 @@ public class Consumer extends Users{
         }  catch (Exception sqle){
             System.out.println("Exception: " + sqle);
         }
-
     }
 
     public void createOrder(String userName){
-        ResultSet result1;
         Random rand = new Random();
         int orderNumGenerated = rand.nextInt(10000); //create a random order number
         int trackingNumGenerated = rand.nextInt(10000); //create a random tracking number
@@ -370,17 +325,15 @@ public class Consumer extends Users{
 
 
             System.out.println("Would you like to use a different shipping and billing address for your order? ");
-            System.out.println("Yes (1)");
-            System.out.println("No (2)");
-            switch (select.nextInt()){
-                case 1:
-                    System.out.println("What is address you would like us to send it too?");
-                    newA = input.nextLine();
-                    newAddress = true;
-                    break;
-                case 2:
-                    break;
+            System.out.println("Yes, enter 1");
+            System.out.println("No, enter 2");
+
+            if(select.nextInt() == 1){
+                System.out.println("What is address you would like us to send it too?");
+                newA = input.nextLine();
+                newAddress = true;
             }
+
             statement.executeUpdate("insert into orders values ('" + orderNumGenerated  + "', '" + userName + "');"); //need to do this first because of order_num foreign key
             statement.executeUpdate("insert into orders_info values ( '" + orderNumGenerated + "'," + totalPrice + ",'" + trackingNumGenerated + "', ' " + company + "','"+ dtf.format(now) + "');");
             statement.executeUpdate("delete from checkout_cart;"); //after creating the order, the checkout_cart rows can be deleted
@@ -389,6 +342,7 @@ public class Consumer extends Users{
             System.out.println("Here is your order Number: " + orderNumGenerated);
             System.out.println("Here is your tracking number: " + trackingNumGenerated);
             System.out.println("Date Order was created: " + dtf.format(now) );                 //add date
+
             if(newAddress) {
                 System.out.println(company + " will be shipping your books to this address: " + newA);
             } else{
@@ -409,21 +363,15 @@ public class Consumer extends Users{
     }
 
     public void payPublisher (String ISBN, int num_books){
-
-        ResultSet result1;
-        double fee;
-        double total;
-        int accountNum;
-
         try  {
             result = statement.executeQuery("select publisher_fee, publisher_id from book where ISBN = '" + ISBN + "';");
 
             if(result.next()) {
-                fee = result.getDouble("publisher_fee");
-                total = fee * (double) num_books;
-                result1 = statement.executeQuery("select bank_account_number from publisher where publisher_id = '" + result.getString("publisher_id") + "';");
+                double fee = result.getDouble("publisher_fee");
+                double total = fee * (double) num_books;
+                ResultSet result1 = statement.executeQuery("select bank_account_number from publisher where publisher_id = '" + result.getString("publisher_id") + "';");
                 if(result1.next()) {
-                    accountNum = result1.getInt("bank_account_number");
+                    int accountNum = result1.getInt("bank_account_number");
                     System.out.println("\n*Publisher with account number '" + accountNum + "' was paid $" + total + "*\n"); //this is displaying to show functionality
                 }
             }
@@ -436,13 +384,11 @@ public class Consumer extends Users{
     }
 
     public void amountSold (ArrayList<String> ISBN,ArrayList<Integer> quantity){ //change the amount sold
-        ResultSet result1;
-
         try  {
             for(int i = 0; i < ISBN.size(); i++){
-                result1 = statement.executeQuery("select amount_sold, publisher_fee from book where ISBN = '" + ISBN.get(i) + "';");
-                if(result1.next()){
-                    int amountSold = result1.getInt("amount_sold") + quantity.get(i);
+                ResultSet res = statement.executeQuery("select amount_sold, publisher_fee from book where ISBN = '" + ISBN.get(i) + "';");
+                if(res.next()){
+                    int amountSold = res.getInt("amount_sold") + quantity.get(i);
                     statement.executeUpdate("update book set amount_sold = " + amountSold + " where ISBN = '" + ISBN.get(i) + "';");
                     payPublisher(ISBN.get(i), quantity.get(i));
                 }

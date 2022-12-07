@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.sql.*;
 
 public class main {
-    //Change name user and databasePassword for it to work on your machine
+    //Change the url, user, and databasePassword accordingly for it to work on your machine
     private final static String url = "jdbc:postgresql://localhost/COMP 3005 Project";
     private final static String user = "postgres";
     private final static String databasePassword = "mot38_Rot";
@@ -14,30 +14,28 @@ public class main {
              Statement statement = connection.createStatement();
         ) {
             try {
-                System.out.println("Please type a username: (*REQUIRED*)");
+                System.out.println("Please enter a username:");
                 String userName = input.nextLine();
-                System.out.println("Please type your password: (*REQUIRED*)");
+                System.out.println("Please enter your password: ");
                 String passWord = input.nextLine();
                 System.out.println("What is your name?");
                 String name = input.nextLine();
-                System.out.println("What is your email? (*REQUIRED*)");
+                System.out.println("What is your email? ");
                 String email = input.nextLine();
                 System.out.println("What is you address?");
                 String address = input.nextLine();
                 System.out.println("What is your phone number? ");
                 String phone = input.nextLine();
-                System.out.println("Are you a Customer (1) or Owner (2) ?");
-                String type = null;
-                switch (input.nextInt()){
-                    case 1:
-                        type = "customer";
-                        break;
-                    case 2:
-                        type = "owner";
-                        break;
+                System.out.println("If you are a customer, enter 1. If you are an owner, enter 2");
+
+                String userType = " ";
+                if(input.nextInt() == 1){
+                    userType = "customer";
+                }else if(input.nextInt() == 2) {
+                    userType = "owner";
                 }
 
-                statement.executeUpdate("insert into users values ('" + name + "', '" + userName + "','" + passWord + "','" + email + "','" + address + "','" + phone + "','" + type + "');");
+                statement.executeUpdate("insert into users values ('" + name + "', '" + userName + "','" + passWord + "','" + email + "','" + address + "','" + phone + "','" + userType + "');");
                 System.out.println("\nCongratulations! You have created your profile! You will now be redirected to the store.\n");
                 loginUser(userName, passWord);
 

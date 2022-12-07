@@ -8,15 +8,13 @@ public class Owner extends Users {
     String username;
     ResultSet result = null;
     Scanner input, select;
-//    Scanner input = new Scanner(System.in); //scan for strings
-//    Scanner select = new Scanner(System.in); //scan for ints
 
     public Owner(Statement statement,Connection connection, String username){
         this.statement = statement;
         this.connection = connection;
         this.username = username;
-        input = new Scanner(System.in); //scan for strings
-        select = new Scanner(System.in); //scan for ints
+        input = new Scanner(System.in);
+        select = new Scanner(System.in);
     }
 
     public void ownerMenu(){
@@ -26,25 +24,20 @@ public class Owner extends Users {
         System.out.println("Delete books (2) ");
         System.out.println("Generate Reports (3) ");
 
-        switch (select.nextInt()){
-            case 1:
-
-                System.out.println("What is the ISBN of the book you want to add to the store?");
-                int ISBN = input.nextInt();
-                System.out.println("How many do you want to add?");
-                int amount = input.nextInt();
-                addBooks(ISBN, amount);
-                break;
-            case 2:
-                System.out.println("What is its ISBN of the book you want to remove from the store?");
-                ISBN = input.nextInt();
-                System.out.println("How many do you want to remove? (Must be larger than 0) ");
-                amount = input.nextInt();
-                removeBooks(ISBN, amount);
-                break;
-            case 3:
-                generateReports();
-                break;
+        if (select.nextInt() == 1){
+            System.out.println("What is the ISBN of the book you want to add to the store?");
+            int ISBN = input.nextInt();
+            System.out.println("How many do you want to add?");
+            int amount = input.nextInt();
+            addBooks(ISBN, amount);
+        }else if(select.nextInt() == 2){
+            System.out.println("What is its ISBN of the book you want to remove from the store?");
+            int ISBN = input.nextInt();
+            System.out.println("How many do you want to remove? (Must be larger than 0) ");
+            int amount = input.nextInt();
+            removeBooks(ISBN, amount);
+        }else if(select.nextInt() == 3){
+            generateReports();
         }
     }
 
@@ -150,21 +143,18 @@ public class Owner extends Users {
     public void generateReports(){
 
         System.out.println("Which Report would you like to see?");
-        System.out.println("Sales by Author (1)");
-        System.out.println("Sales between dates (2)");
+        System.out.println("Sales by Author, enter 1");
+        System.out.println("Sales between date, enter 2");
 
-        switch (select.nextInt()){
-            case 1:
-                System.out.println("What is the Author's name?");
-                String author = input.nextLine();
-                salesByAuthor(author);
-                break;
-            case 2:
-                System.out.println("Between which dates would you like to find the sales?");
-                System.out.println("Please enter the first date (Format yyyy-mm-dd) "); String firstDate = input.nextLine();
-                System.out.println("Please enter the second date (Format yyyy-mm-dd) "); String secondDate = input.nextLine();
-                salesByDates(firstDate, secondDate);
-                break;
+        if(select.nextInt() == 1){
+            System.out.println("What is the Author's name?");
+            String author = input.nextLine();
+            salesByAuthor(author);
+        }else if(select.nextInt() == 2) {
+            System.out.println("Between which dates would you like to find the sales?");
+            System.out.println("Please enter the first date (Format yyyy-mm-dd) "); String firstDate = input.nextLine();
+            System.out.println("Please enter the second date (Format yyyy-mm-dd) "); String secondDate = input.nextLine();
+            salesByDates(firstDate, secondDate);
         }
     }
 
