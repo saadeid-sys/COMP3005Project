@@ -30,6 +30,23 @@ public class Consumer extends Users{
         System.out.println("Checkout Cart enter, 4 ");
         System.out.println("Exit, enter 5 ");
 
+        switch (select.nextInt()){
+            case 1:
+                searchBook();
+                break;
+            case 2:
+                buyBook();
+                break;
+            case 3:
+                checkOrders();
+                break;
+            case 4:
+                viewCart(username);
+                break;
+            case 5:
+                System.exit(0);
+
+        }/*
         if(select.nextInt() == 1){
             searchBook();
         }else if(select.nextInt() == 2){
@@ -40,7 +57,7 @@ public class Consumer extends Users{
             viewCart(username);
         }else if(select.nextInt() == 5){
             System.exit(0);
-        }
+        }*/
     }
 
     public void searchBook(){
@@ -52,6 +69,28 @@ public class Consumer extends Users{
         System.out.println("Search by Genre, enter 4 ");
         System.out.println("Return to previous menu, enter 5 ");
 
+        switch (select.nextInt()){
+            case 1:
+                System.out.println("What is the title you are looking for?");
+                searchByTitle(input.nextLine());
+                break;
+            case 2:
+                System.out.println("What is the ISBN Number (7 digits) ?");
+                searchByISBN(select.nextInt());
+                break;
+            case 3:
+                System.out.println("What is the author you are looking for?");
+                searchByAuthor(input.nextLine());
+                break;
+            case 4:
+                System.out.println("What is the genre you are looking for?");
+                searchByGenre(input.nextLine());
+                break;
+            case 5:
+                consumerMenu();
+                break;
+        }
+        /*
         if(select.nextInt() == 1){
             System.out.println("What is the title you are looking for?");
             searchByTitle(input.nextLine());
@@ -61,12 +100,12 @@ public class Consumer extends Users{
         }else if(select.nextInt() == 3){
             System.out.println("What is the author you are looking for?");
             searchByAuthor(input.nextLine());
-        }else if(select.nextInt() == 3){
+        }else if(select.nextInt() == 4){
             System.out.println("What is the genre you are looking for?");
             searchByGenre(input.nextLine());
         }else{
             consumerMenu();
-        }
+        }*/
     }
 
     public void searchByTitle(String bookTitle){
@@ -237,7 +276,6 @@ public class Consumer extends Users{
         try{
             result = statement.executeQuery("select * from orders right join orders_data on orders.order_number = orders_data.order_number and username = ('" + username + "') ;");
 
-
             System.out.println("Orders for user: " + username);
             while (result.next()){
                 System.out.println("Order Number: " + result.getString("order_num"));
@@ -270,6 +308,20 @@ public class Consumer extends Users{
             System.out.println("Continue shopping, enter 2");
             System.out.println("Remove an Item from Cart, enter 3");
 
+            switch(select.nextInt()){
+                case 1:
+                    createOrder(userName);
+                case 2:
+                    consumerMenu();
+                    break;
+                case 3:
+                    System.out.println("What is the book title of the book you would like to remove?");
+                    String bookTitle = input.nextLine();
+                    removeFromCart(bookTitle);
+                    break;
+
+            }
+            /*
             if(select.nextInt() == 1){
                 createOrder(userName);
             }else if(select.nextInt() == 2){
@@ -278,7 +330,7 @@ public class Consumer extends Users{
                 System.out.println("What is the book title of the book you would like to remove?");
                 String bookTitle = input.nextLine();
                 removeFromCart(bookTitle);
-            }
+            }*/
 
         }  catch (SQLException sqle) {
             System.out.println("You have not added anything into your cart." + sqle);
