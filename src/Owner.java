@@ -23,20 +23,23 @@ public class Owner extends Users {
         System.out.println("Delete books, enter 2");
         System.out.println("Generate Reports, enter 3");
 
-        if (select.nextInt() == 1){
-            System.out.println("What is the ISBN of the book you want to add to the store?");
-            int ISBN = input.nextInt();
-            System.out.println("How many do you want to add?");
-            int amount = input.nextInt();
-            addBooks(ISBN, amount);
-        }else if(select.nextInt() == 2){
-            System.out.println("What is its ISBN of the book you want to remove from the store?");
-            int ISBN = input.nextInt();
-            System.out.println("How many do you want to remove? (Must be larger than 0) ");
-            int amount = input.nextInt();
-            removeBooks(ISBN, amount);
-        }else if(select.nextInt() == 3){
-            generateReports();
+        switch (select.nextInt()){
+            case 1:
+                System.out.println("What is the ISBN of the book you want to add to the store?");
+                int ISBN = input.nextInt();
+                System.out.println("How many do you want to add?");
+                int amount = input.nextInt();
+                addBooks(ISBN, amount);
+                break;
+            case 2:
+                System.out.println("What is its ISBN of the book you want to remove from the store?");
+                ISBN = input.nextInt();
+                System.out.println("How many do you want to remove? (Must be larger than 0) ");
+                amount = input.nextInt();
+                removeBooks(ISBN, amount);
+                break;
+            case 3:
+                generateReports();
         }
     }
 
@@ -116,13 +119,13 @@ public class Owner extends Users {
 
     }
 
-    public void removeBooks( int ISBN, int numBooks){ //will only remove books from the inventory, therefore it can't be sold
+    public void removeBooks(int ISBN, int numBooks){ //will only remove books from the inventory, therefore it can't be sold
 
         try{
 
             result = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
             if(result.next()){
-                if(result.getInt("quantity") >= numBooks) {
+                if(result.getInt("book_quantity") >= numBooks) {
                     statement.executeUpdate("update inventory set book_quantity = " + numBooks + ";");
                 } else{
                     statement.executeUpdate("update inventory set book_quantity = " + 0 + ";");
@@ -145,15 +148,20 @@ public class Owner extends Users {
         System.out.println("Sales by Author, enter 1");
         System.out.println("Sales between date, enter 2");
 
-        if(select.nextInt() == 1){
-            System.out.println("What is the Author's name?");
-            String author = input.nextLine();
-            salesByAuthor(author);
-        }else if(select.nextInt() == 2) {
-            System.out.println("Between which dates would you like to find the sales?");
-            System.out.println("Please enter the first date (Format yyyy-mm-dd) "); String firstDate = input.nextLine();
-            System.out.println("Please enter the second date (Format yyyy-mm-dd) "); String secondDate = input.nextLine();
-            salesByDates(firstDate, secondDate);
+        switch (select.nextInt()) {
+            case 1:
+                System.out.println("What is the Author's name?");
+                String author = input.nextLine();
+                salesByAuthor(author);
+                break;
+            case 2:
+                System.out.println("Between which dates would you like to find the sales?");
+                System.out.println("Please enter the first date (Format yyyy-mm-dd) ");
+                String firstDate = input.nextLine();
+                System.out.println("Please enter the second date (Format yyyy-mm-dd) ");
+                String secondDate = input.nextLine();
+                salesByDates(firstDate, secondDate);
+                break;
         }
     }
 
@@ -162,7 +170,7 @@ public class Owner extends Users {
         double totalSales = 0;
 
         try  {
-            result = statement.executeQuery("select * from book natural join (select * from book_data where author_name = '" + author + "')");
+            result = statement.executeQuery("select * from book natural join (select * from book_data where author_name = '" + author + "') as table2");
 
             while (result.next()){
                 totalSales += result.getDouble("price")*result.getInt("amount_sold");
