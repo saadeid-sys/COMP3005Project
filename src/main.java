@@ -93,14 +93,23 @@ public class main {
         System.out.println("If you are an existing user, enter 1");
         System.out.println("If you are an new user, enter 2");
 
-        if (input.nextInt() == 1){
-            System.out.println("Enter Username: \n");
-            String userName = login.nextLine();
-            System.out.println("Enter Password: \n");
-            String password = login.nextLine();
-            loginUser(userName, password);
-        }else if (input.nextInt() == 2){
-            createUser();
+        switch (input.nextInt()){
+            case 1:
+                System.out.println("Enter Username: \n");
+                String userName = login.nextLine();
+                System.out.println("Enter Password: \n");
+                String password = login.nextLine();
+                loginUser(userName, password);
+                break;
+            case 2:
+                createUser();
+                break;
+
         }
+//        if (input.nextInt() == 1){
+//
+//        }else if (input.nextInt() == 2){
+//
+//        }
     }
 }

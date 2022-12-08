@@ -249,6 +249,7 @@ public class Consumer extends Users{
                         result = statement.executeQuery("select ISBN, book_name, price from book where ISBN = '" + bookISBN + "';");
                         if(result.next()) {
                             statement.executeUpdate("insert into cart values ('" + bookISBN + "', '" + result.getString("book_name") + "', '" + username +  "' ," + result.getDouble("price") + ", " + quantity + ")");
+                            System.out.println("Book added to cart!");
                         }
                     } else {
                         System.out.println("We do not have " + quantity + " of this book. ");
