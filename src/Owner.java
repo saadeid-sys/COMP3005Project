@@ -18,7 +18,7 @@ public class Owner extends Users {
 
     public void ownerMenu(){
 
-        System.out.println("Select an select:");
+        System.out.println("Select an option from the following menu:");
         System.out.println("Add books, enter 1");
         System.out.println("Delete books, enter 2");
         System.out.println("Generate Reports, enter 3");

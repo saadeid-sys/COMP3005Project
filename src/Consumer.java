@@ -21,9 +21,9 @@ public class Consumer extends Users{
         select = new Scanner(System.in);
     }
 
-    public void customerMenu(){
+    public void consumerMenu(){
 
-        System.out.println("Select one of the following options: ");
+        System.out.println("Select an option from the following menu:");
         System.out.println("Search a book, enter 1 ");
         System.out.println("Buy a book, enter 2 ");
         System.out.println("Check Orders, enter 3 ");
@@ -37,7 +37,7 @@ public class Consumer extends Users{
         }else if(select.nextInt() == 3){
             checkOrders();
         }else if(select.nextInt() == 4){
-            checkoutCart(username);
+            viewCart(username);
         }else if(select.nextInt() == 5){
             System.exit(0);
         }
@@ -65,17 +65,17 @@ public class Consumer extends Users{
             System.out.println("What is the genre you are looking for?");
             searchByGenre(input.nextLine());
         }else{
-            customerMenu();
+            consumerMenu();
         }
     }
 
     public void searchByTitle(String bookTitle){
         try  {
             result = statement.executeQuery(
-                    "select book.ISBN, book.book_name, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_info.book_name where book.book_name like '%" + bookTitle + "%';");
+                    "select book.ISBN, book.book_name, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_data.book_name where book.book_name like '%" + bookTitle + "%';");
 
             while(result.next()) {
-                System.out.println("Book Title: " + result.getString("book_name"));
+                System.out.println("Book name: " + result.getString("book_name"));
                 System.out.println("ISBN: " + result.getString("isbn"));
                 System.out.println("Author: " + result.getString("author_name"));
                 System.out.println("Genre: " + result.getString("genre"));
@@ -101,10 +101,10 @@ public class Consumer extends Users{
 
         try  {
             result = statement.executeQuery(
-                    "select book.book_name, book.ISBN, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_info on book.book_title = book_data.book_title where book.ISBN like '%" + ISBN + "%' ;");
+                    "select book.book_name, book.ISBN, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_data.book_name where book.ISBN like '%" + ISBN + "%' ;");
 
             while(result.next()) {
-                System.out.println("Book Title: " + result.getString("book_name"));
+                System.out.println("Book name: " + result.getString("book_name"));
                 System.out.println("ISBN: " + result.getString("isbn"));
                 System.out.println("Author: " + result.getString("author_name"));
                 System.out.println("Genre: " + result.getString("genre"));
@@ -129,7 +129,7 @@ public class Consumer extends Users{
 
         try  {
             result = statement.executeQuery(
-                    "select book.book_name, book.ISBN, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_name.book_name where book_data.author_name like '%" + author + "%' ;");
+                    "select book.ISBN, book.book_name, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_name.book_name where book_data.author_name like '%" + author + "%' ;");
 
             while(result.next()) {
                 System.out.println("Book Title: " + result.getString("book_name"));
@@ -188,7 +188,7 @@ public class Consumer extends Users{
         }else if (option == 2){
             searchBook();
         }else if (option == 3){
-            customerMenu();
+            consumerMenu();
         }
     }
 
@@ -209,7 +209,7 @@ public class Consumer extends Users{
                     if(quantity <= quan && quan != 0){ //then we can buy the book
                         result = statement.executeQuery("select ISBN, book_name, price from book where ISBN = '" + bookISBN + "';");
                         if(result.next()) {
-                            statement.executeUpdate("insert into cart values ('" + bookISBN + "', '" + result.getString("book_name") + "'," + result.getDouble("price") + ", " + quantity + ",'" + username + "')");
+                            statement.executeUpdate("insert into cart values ('" + bookISBN + "', '" + result.getString("book_name") + "', '" + username +  "' ," + result.getDouble("price") + ", " + quantity + ")");
                         }
                     } else {
                         System.out.println("We do not have " + quantity + " of this book. ");
@@ -222,7 +222,7 @@ public class Consumer extends Users{
                 buyBook();
             }
 
-            customerMenu();
+            consumerMenu();
 
         } catch (SQLException sqle) {
             System.out.println("Could not purchase book" + sqle.getMessage());
@@ -235,7 +235,8 @@ public class Consumer extends Users{
     public void checkOrders(){
 
         try{
-            result = statement.executeQuery("select * from orders right join orders_data on orders.order_num = orders_data.order_num and username = ('" + username + "') ;");
+            result = statement.executeQuery("select * from orders right join orders_data on orders.order_number = orders_data.order_number and username = ('" + username + "') ;");
+
 
             System.out.println("Orders for user: " + username);
             while (result.next()){
@@ -252,14 +253,14 @@ public class Consumer extends Users{
 
     }
 
-    public void checkoutCart(String userName){
+    public void viewCart(String userName){
         try{
             result = statement.executeQuery("select * from cart where username = ('" + userName + "') ;");
 
             System.out.println("\nCart: ");
             while (result.next()){
                 System.out.println("Book ISBN: " + result.getString("ISBN"));
-                //System.out.println("Book name: "  + result.getString("book_name"));
+                System.out.println("Book name: "  + result.getString("book_name"));
                 System.out.println("Price per copy: $" + result.getString("total_price"));
                 System.out.println("Amount of Copies: " + result.getString("quantity") + "\n");
             }
@@ -272,7 +273,7 @@ public class Consumer extends Users{
             if(select.nextInt() == 1){
                 createOrder(userName);
             }else if(select.nextInt() == 2){
-                customerMenu();
+                consumerMenu();
             }else if(select.nextInt() == 3){
                 System.out.println("What is the book title of the book you would like to remove?");
                 String bookTitle = input.nextLine();
@@ -286,14 +287,14 @@ public class Consumer extends Users{
         }
     }
 
-    public void removeFromCart(String book){
+    public void removeFromCart(String bookName){
         try{
-            statement.executeUpdate("delete from cart where book_name = '" + book + "';");
-            checkoutCart(username);
+            statement.executeUpdate("delete from cart where book_name = '" + bookName + "';");
+            viewCart(username);
 
         }  catch (SQLException sqle) {
             System.out.println("Could not remove the book." +sqle);
-            checkoutCart(username);
+            viewCart(username);
         }  catch (Exception sqle){
             System.out.println("Exception: " + sqle);
         }
@@ -332,7 +333,7 @@ public class Consumer extends Users{
                 newAddress = true;
             }
 
-            statement.executeUpdate("insert into orders values ('" + orderNumGenerated  + "', '" + userName + "');"); //need to do this first because of order_num foreign key
+            statement.executeUpdate("insert into orders values ('" + userName + "', '" + orderNumGenerated + "');"); //need to do this first because of order_num foreign key
             statement.executeUpdate("insert into orders_data values ( '" + orderNumGenerated + "'," + totalPrice + ",'" + trackingNumGenerated + "','" + dtf.format(now) + "');");
             statement.executeUpdate("delete from cart;"); //after creating the order, the checkout_cart rows can be deleted
 
@@ -354,7 +355,7 @@ public class Consumer extends Users{
 
         }  catch (SQLException sqle) {
             System.out.println("You have not added anything into your cart." + sqle);
-            customerMenu();
+            consumerMenu();
         }  catch (Exception sqle){
             System.out.println("Exception: " + sqle);
         }

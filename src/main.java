@@ -67,7 +67,7 @@ public class main {
                 if(type.equals(cust)){ //if it's a customer we show certain menu
                     System.out.println("Welcome Customer! \n");
                     Consumer c = new Consumer(statement,connection, username);
-                    c.customerMenu();
+                    c.consumerMenu();
                 } else { // owner/manager // if it's a manager we show another menu
                     System.out.println("Welcome Owner! \n");
                     Owner o = new Owner(statement, connection, username);
