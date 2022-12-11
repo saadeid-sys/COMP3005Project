@@ -88,12 +88,6 @@ public class Consumer extends Users{
 
             while(result.next()) {
                 printResultSet(result);
-//                System.out.println("ISBN: " + result.getString("isbn"));
-//                System.out.println("Book name: " + result.getString("book_name"));
-//                System.out.println("Author: " + result.getString("author_name"));
-//                System.out.println("Genre: " + result.getString("genre"));
-//                System.out.println("Number of Pages: " + result.getString("num_pages"));
-//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
 
             System.out.println("Would you like to purchase a book?");
@@ -127,12 +121,6 @@ public class Consumer extends Users{
 
             while(result.next()) {
                 printResultSet(result);
-//                System.out.println("Book name: " + result.getString("book_name"));
-//                System.out.println("ISBN: " + result.getString("isbn"));
-//                System.out.println("Author: " + result.getString("author_name"));
-//                System.out.println("Genre: " + result.getString("genre"));
-//                System.out.println("Number of Pages: " + result.getString("num_pages"));
-//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
             System.out.println("Yes, enter 1");
@@ -156,12 +144,6 @@ public class Consumer extends Users{
 
             while(result.next()) {
                 printResultSet(result);
-//                System.out.println("Book Title: " + result.getString("book_name"));
-//                System.out.println("ISBN: " + result.getString("isbn"));
-//                System.out.println("Author: " + result.getString("author_name"));
-//                System.out.println("Genre: " + result.getString("genre"));
-//                System.out.println("Number of Pages: " + result.getString("num_pages"));
-//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
             System.out.println("Yes, enter 1");
@@ -185,12 +167,6 @@ public class Consumer extends Users{
 
             while(result.next()) {
                 printResultSet(result);
-//                System.out.println("Book Title: " + result.getString("book_title"));
-//                System.out.println("ISBN: " + result.getString("isbn"));
-//                System.out.println("Author: " + result.getString("author_name"));
-//                System.out.println("Genre: " + result.getString("genre"));
-//                System.out.println("Number of Pages: " + result.getString("num_pages"));
-//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
 
             System.out.println("Would you like to purchase a book?");

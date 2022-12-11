@@ -53,8 +53,8 @@ public class Owner extends Users {
             if(result.next()){
                 res = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
                 if(res.next()){
-                    int quantityInventory = res.getInt("book_quantity") + numBooks;
-                    statement.executeUpdate("update inventory set book_quantity = '" + quantityInventory + "' where ISBN = '" + ISBN + "';");
+                    int quantity = res.getInt("book_quantity") + numBooks;
+                    statement.executeUpdate("update inventory set book_quantity = '" + quantity + "' where ISBN = '" + ISBN + "';");
                 }
                 //must then pay the publisher
                 payPublisher(ISBN, numBooks);
@@ -115,6 +115,33 @@ public class Owner extends Users {
         }
     }
 
+    public void payPublisher(int ISBN, int num_books){
+
+        ResultSet result1;
+        double fee;
+        double total;
+        int accountNum;
+
+        try  {
+            result = statement.executeQuery("select publisher_fee, p_id from book where ISBN = '" + ISBN + "';");
+            if(result.next()) {
+                fee = result.getDouble("publisher_fee");
+                total = fee * (double) num_books;
+                result1 = statement.executeQuery("select bank_account_number from publisher where p_id = '" + result.getString("p_id") + "';");
+                if(result1.next()) {
+                    accountNum = result1.getInt("bank_account_number");
+                    System.out.println("\n*Publisher with account number '" + accountNum + "' was paid $" + total + "*\n");
+                }
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not pay publisher!" +sqle);
+        }
+        catch (Exception sqle){
+            System.out.println("Exception: " + sqle);
+        }
+    }
+
     public void removeBooksFromBookStore(int ISBN, int numBooks){ //will only remove books from the inventory, therefore it can't be sold
         try{
             result = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
@@ -134,28 +161,6 @@ public class Owner extends Users {
             System.out.println("Exception: " + sqle);
         }
 
-    }
-
-    public void generateReports(){
-        System.out.println("Which Report would you like to see?");
-        System.out.println("Sales by Author, enter 1");
-        System.out.println("Sales between date, enter 2");
-
-        switch (select.nextInt()) {
-            case 1:
-                System.out.println("What is the Author's name?");
-                String author = input.nextLine();
-                salesByAuthor(author);
-                break;
-            case 2:
-                System.out.println("Between which dates would you like to find the sales?");
-                System.out.println("Please enter the first date (Format yyyy-mm-dd) ");
-                String firstDate = input.nextLine();
-                System.out.println("Please enter the second date (Format yyyy-mm-dd) ");
-                String secondDate = input.nextLine();
-                salesByDates(firstDate, secondDate);
-                break;
-        }
     }
 
     public void salesByAuthor(String author){ //same thing would apply to any fo the other attribute fo book
@@ -190,7 +195,7 @@ public class Owner extends Users {
             result = statement.executeQuery("select order_total from orders_data where date >= '" + fD + "' and date <= '" + sD + "';");
 
             while (result.next()){
-                totalSales += result.getDouble("order_total_price");
+                totalSales += result.getDouble("order_total");
             }
 
             System.out.println("The Sales between " + fD + " and " + sD + " is $" + totalSales);
@@ -206,30 +211,25 @@ public class Owner extends Users {
 
     }
 
-    public void payPublisher(int ISBN, int num_books){
+    public void generateReports(){
+        System.out.println("Which Report would you like to see?");
+        System.out.println("Sales by Author, enter 1");
+        System.out.println("Sales between date, enter 2");
 
-        ResultSet result1;
-        double fee;
-        double total;
-        int accountNum;
-
-        try  {
-            result = statement.executeQuery("select publisher_fee, p_id from book where ISBN = '" + ISBN + "';");
-            if(result.next()) {
-                fee = result.getDouble("publisher_fee");
-                total = fee * (double) num_books;
-                result1 = statement.executeQuery("select bank_account_number from publisher where p_id = '" + result.getString("p_id") + "';");
-                if(result1.next()) {
-                    accountNum = result1.getInt("bank_account_number");
-                    System.out.println("\n*Publisher with account number '" + accountNum + "' was paid $" + total + "*\n");
-                }
-            }
-
-        } catch (SQLException sqle) {
-            System.out.println("Could not pay publisher!" +sqle);
-        }
-        catch (Exception sqle){
-            System.out.println("Exception: " + sqle);
+        switch (select.nextInt()) {
+            case 1:
+                System.out.println("What is the Author's name?");
+                String author = input.nextLine();
+                salesByAuthor(author);
+                break;
+            case 2:
+                System.out.println("Between which dates would you like to find the sales?");
+                System.out.println("Please enter the first date (Format yyyy-mm-dd) ");
+                String firstDate = input.nextLine();
+                System.out.println("Please enter the second date (Format yyyy-mm-dd) ");
+                String secondDate = input.nextLine();
+                salesByDates(firstDate, secondDate);
+                break;
         }
     }
 }
