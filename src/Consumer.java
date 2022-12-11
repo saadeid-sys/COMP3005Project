@@ -32,7 +32,7 @@ public class Consumer extends Users{
 
         switch (select.nextInt()){
             case 1:
-                searchBook();
+                QueryBook();
                 break;
             case 2:
                 buyBook();
@@ -46,40 +46,29 @@ public class Consumer extends Users{
             case 5:
                 System.exit(0);
 
-        }/*
-        if(select.nextInt() == 1){
-            searchBook();
-        }else if(select.nextInt() == 2){
-            buyBook();
-        }else if(select.nextInt() == 3){
-            checkOrders();
-        }else if(select.nextInt() == 4){
-            viewCart(username);
-        }else if(select.nextInt() == 5){
-            System.exit(0);
-        }*/
+        }
     }
 
-    public void searchBook(){
+    public void QueryBook(){
 
-        System.out.println("Select the way you would like to search?");
-        System.out.println("Search by Title, enter 1 ");
-        System.out.println("Search by ISBN, enter 2 ");
-        System.out.println("Search by Author, enter 3 ");
-        System.out.println("Search by Genre, enter 4 ");
+        System.out.println("How would you like to query for a book?");
+        System.out.println("Query by Title, enter 1 ");
+        System.out.println("Query by ISBN, enter 2 ");
+        System.out.println("Query by Author, enter 3 ");
+        System.out.println("Query by Genre, enter 4 ");
         System.out.println("Return to previous menu, enter 5 ");
 
         switch (select.nextInt()){
             case 1:
                 System.out.println("What is the title you are looking for?");
-                searchByTitle(input.nextLine());
+                queryByTitle(input.nextLine());
                 break;
             case 2:
-                System.out.println("What is the ISBN Number (7 digits) ?");
+                System.out.println("What is the 7 digit ISBN Number?");
                 searchByISBN(select.nextInt());
                 break;
             case 3:
-                System.out.println("What is the author you are looking for?");
+                System.out.println("What is the author of the book you are looking for?");
                 searchByAuthor(input.nextLine());
                 break;
             case 4:
@@ -90,36 +79,21 @@ public class Consumer extends Users{
                 consumerMenu();
                 break;
         }
-        /*
-        if(select.nextInt() == 1){
-            System.out.println("What is the title you are looking for?");
-            searchByTitle(input.nextLine());
-        }else if(select.nextInt() == 2){
-            System.out.println("What is the ISBN Number (7 digits) ?");
-            searchByISBN(select.nextInt());
-        }else if(select.nextInt() == 3){
-            System.out.println("What is the author you are looking for?");
-            searchByAuthor(input.nextLine());
-        }else if(select.nextInt() == 4){
-            System.out.println("What is the genre you are looking for?");
-            searchByGenre(input.nextLine());
-        }else{
-            consumerMenu();
-        }*/
     }
 
-    public void searchByTitle(String bookTitle){
+    public void queryByTitle(String bookTitle){
         try  {
             result = statement.executeQuery(
                     "select book.ISBN, book.book_name, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_data.book_name where book.book_name like '%" + bookTitle + "%';");
 
             while(result.next()) {
-                System.out.println("Book name: " + result.getString("book_name"));
-                System.out.println("ISBN: " + result.getString("isbn"));
-                System.out.println("Author: " + result.getString("author_name"));
-                System.out.println("Genre: " + result.getString("genre"));
-                System.out.println("Number of Pages: " + result.getString("num_pages"));
-                System.out.println("Price: $" + result.getString("price") + "\n");
+                printResultSet(result);
+//                System.out.println("ISBN: " + result.getString("isbn"));
+//                System.out.println("Book name: " + result.getString("book_name"));
+//                System.out.println("Author: " + result.getString("author_name"));
+//                System.out.println("Genre: " + result.getString("genre"));
+//                System.out.println("Number of Pages: " + result.getString("num_pages"));
+//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
 
             System.out.println("Would you like to purchase a book?");
@@ -136,6 +110,15 @@ public class Consumer extends Users{
         }
     }
 
+    private void printResultSet(ResultSet result) throws SQLException {
+        System.out.println("ISBN: " + result.getString("isbn"));
+        System.out.println("Book name: " + result.getString("book_name"));
+        System.out.println("Author: " + result.getString("author_name"));
+        System.out.println("Genre: " + result.getString("genre"));
+        System.out.println("Number of Pages: " + result.getString("num_pages"));
+        System.out.println("Price: $" + result.getString("price") + "\n");
+    }
+
     public void searchByISBN(int ISBN){
 
         try  {
@@ -143,12 +126,13 @@ public class Consumer extends Users{
                     "select book.book_name, book.ISBN, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_data.book_name where book.ISBN like '%" + ISBN + "%' ;");
 
             while(result.next()) {
-                System.out.println("Book name: " + result.getString("book_name"));
-                System.out.println("ISBN: " + result.getString("isbn"));
-                System.out.println("Author: " + result.getString("author_name"));
-                System.out.println("Genre: " + result.getString("genre"));
-                System.out.println("Number of Pages: " + result.getString("num_pages"));
-                System.out.println("Price: $" + result.getString("price") + "\n");
+                printResultSet(result);
+//                System.out.println("Book name: " + result.getString("book_name"));
+//                System.out.println("ISBN: " + result.getString("isbn"));
+//                System.out.println("Author: " + result.getString("author_name"));
+//                System.out.println("Genre: " + result.getString("genre"));
+//                System.out.println("Number of Pages: " + result.getString("num_pages"));
+//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
             System.out.println("Yes, enter 1");
@@ -171,12 +155,13 @@ public class Consumer extends Users{
                     "select book.ISBN, book.book_name, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_name.book_name where book_data.author_name like '%" + author + "%' ;");
 
             while(result.next()) {
-                System.out.println("Book Title: " + result.getString("book_name"));
-                System.out.println("ISBN: " + result.getString("isbn"));
-                System.out.println("Author: " + result.getString("author_name"));
-                System.out.println("Genre: " + result.getString("genre"));
-                System.out.println("Number of Pages: " + result.getString("num_pages"));
-                System.out.println("Price: $" + result.getString("price") + "\n");
+                printResultSet(result);
+//                System.out.println("Book Title: " + result.getString("book_name"));
+//                System.out.println("ISBN: " + result.getString("isbn"));
+//                System.out.println("Author: " + result.getString("author_name"));
+//                System.out.println("Genre: " + result.getString("genre"));
+//                System.out.println("Number of Pages: " + result.getString("num_pages"));
+//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
             System.out.println("Would you like to purchase a book?");
             System.out.println("Yes, enter 1");
@@ -199,12 +184,13 @@ public class Consumer extends Users{
                     "select book.book_name, book.ISBN, book_data.author_name, book_data.genre, book.num_pages, book.price from book full outer join book_data on book.book_name = book_data.book_name where book_data.genre = ('" + genre + "') ;");
 
             while(result.next()) {
-                System.out.println("Book Title: " + result.getString("book_title"));
-                System.out.println("ISBN: " + result.getString("isbn"));
-                System.out.println("Author: " + result.getString("author_name"));
-                System.out.println("Genre: " + result.getString("genre"));
-                System.out.println("Number of Pages: " + result.getString("num_pages"));
-                System.out.println("Price: $" + result.getString("price") + "\n");
+                printResultSet(result);
+//                System.out.println("Book Title: " + result.getString("book_title"));
+//                System.out.println("ISBN: " + result.getString("isbn"));
+//                System.out.println("Author: " + result.getString("author_name"));
+//                System.out.println("Genre: " + result.getString("genre"));
+//                System.out.println("Number of Pages: " + result.getString("num_pages"));
+//                System.out.println("Price: $" + result.getString("price") + "\n");
             }
 
             System.out.println("Would you like to purchase a book?");
@@ -225,7 +211,7 @@ public class Consumer extends Users{
         if (option == 1){
             buyBook();
         }else if (option == 2){
-            searchBook();
+            QueryBook();
         }else if (option == 3){
             consumerMenu();
         }
@@ -318,20 +304,10 @@ public class Consumer extends Users{
                 case 3:
                     System.out.println("What is the book title of the book you would like to remove?");
                     String bookTitle = input.nextLine();
-                    removeFromCart(bookTitle);
+                    removeBookFromCart(bookTitle);
                     break;
 
             }
-            /*
-            if(select.nextInt() == 1){
-                createOrder(userName);
-            }else if(select.nextInt() == 2){
-                consumerMenu();
-            }else if(select.nextInt() == 3){
-                System.out.println("What is the book title of the book you would like to remove?");
-                String bookTitle = input.nextLine();
-                removeFromCart(bookTitle);
-            }*/
 
         }  catch (SQLException sqle) {
             System.out.println("You have not added anything into your cart." + sqle);
@@ -340,7 +316,7 @@ public class Consumer extends Users{
         }
     }
 
-    public void removeFromCart(String bookName){
+    public void removeBookFromCart(String bookName){
         try{
             statement.executeUpdate("delete from cart where book_name = '" + bookName + "';");
             viewCart(username);
@@ -355,11 +331,8 @@ public class Consumer extends Users{
 
     public void createOrder(String userName){
         Random rand = new Random();
-        int orderNumGenerated = rand.nextInt(10000); //create a random order number
-        int trackingNumGenerated = rand.nextInt(10000); //create a random tracking number
-        String [] shipping_comp = {"Amazon", "FedEx", "UPS"}; // one of these three shipping companies will be randomly chosen to perform the shipping.
-        int randomShipping = rand.nextInt(shipping_comp.length);
-        String company = shipping_comp[randomShipping];
+        int orderNumGenerated = rand.nextInt(10000);
+        int trackingNumGenerated = rand.nextInt(10000);
         double totalPrice = 0;
         boolean newAddress = false;
         String newA = null;
@@ -373,8 +346,7 @@ public class Consumer extends Users{
                 temp1.add(result.getString("ISBN")); //store the ISBN in a temp array.
                 temp2.add(result.getInt("quantity")); //store the quantity of the ISBN book in the same index for temp use.
             }
-            amountSold(temp1, temp2); //change the amount sold
-
+            amountOfBooksSold(temp1, temp2);
 
             System.out.println("Would you like to use a different shipping and billing address for your order? ");
             System.out.println("Yes, enter 1");
@@ -386,25 +358,11 @@ public class Consumer extends Users{
                 newAddress = true;
             }
 
-            statement.executeUpdate("insert into orders values ('" + userName + "', '" + orderNumGenerated + "');"); //need to do this first because of order_num foreign key
+            statement.executeUpdate("insert into orders values ('" + userName + "', '" + orderNumGenerated + "');");
             statement.executeUpdate("insert into orders_data values ( '" + orderNumGenerated + "'," + totalPrice + ",'" + trackingNumGenerated + "','" + dtf.format(now) + "');");
-            statement.executeUpdate("delete from cart;"); //after creating the order, the checkout_cart rows can be deleted
+            statement.executeUpdate("delete from cart;");
 
-            System.out.println("Order Created Successfully. Here is your order details:");
-            System.out.println("Here is your order Number: " + orderNumGenerated);
-            System.out.println("Here is your tracking number: " + trackingNumGenerated);
-            System.out.println("Date Order was created: " + dtf.format(now) );                 //add date
-            /*
-            if(newAddress) {
-                System.out.println(company + " will be shipping your books to this address: " + newA);
-            } else{
-                result = statement.executeQuery("select address from users where username = '" + userName + "';");
-                if(result.next()){
-                    System.out.println(company + " will be shipping your books to this address: " + result.getString("address"));
-                }
-
-            }*/
-            System.out.println("The total price of your order is: $" + totalPrice + "\n");
+            printOrderDetail(orderNumGenerated, trackingNumGenerated, totalPrice);
 
         }  catch (SQLException sqle) {
             System.out.println("You have not added anything into your cart." + sqle);
@@ -412,6 +370,14 @@ public class Consumer extends Users{
         }  catch (Exception sqle){
             System.out.println("Exception: " + sqle);
         }
+    }
+
+    private void printOrderDetail(int orderNumGenerated, int trackingNumGenerated, double totalPrice) {
+        System.out.println("Order Created Successfully. Here is your order details:");
+        System.out.println("Here is your order Number: " + orderNumGenerated);
+        System.out.println("Here is your tracking number: " + trackingNumGenerated);
+        System.out.println("Date Order was created: " + dtf.format(now) );
+        System.out.println("The total price of your order is: $" + totalPrice + "\n");
     }
 
     public void payPublisher (String ISBN, int num_books){
@@ -435,7 +401,7 @@ public class Consumer extends Users{
         }
     }
 
-    public void amountSold (ArrayList<String> ISBN,ArrayList<Integer> quantity){ //change the amount sold
+    public void amountOfBooksSold(ArrayList<String> ISBN, ArrayList<Integer> quantity){
         try  {
             for(int i = 0; i < ISBN.size(); i++){
                 ResultSet res = statement.executeQuery("select amount_sold, publisher_fee from book where ISBN = '" + ISBN.get(i) + "';");

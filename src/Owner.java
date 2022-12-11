@@ -29,22 +29,21 @@ public class Owner extends Users {
                 int ISBN = input.nextInt();
                 System.out.println("How many do you want to add?");
                 int amount = input.nextInt();
-                addBooks(ISBN, amount);
+                addBooksToStore(ISBN, amount);
                 break;
             case 2:
                 System.out.println("What is its ISBN of the book you want to remove from the store?");
                 ISBN = input.nextInt();
                 System.out.println("How many do you want to remove? (Must be larger than 0) ");
                 amount = input.nextInt();
-                removeBooks(ISBN, amount);
+                removeBooksFromBookStore(ISBN, amount);
                 break;
             case 3:
                 generateReports();
         }
     }
 
-    public void addBooks(int ISBN, int numBooks){
-
+    public void addBooksToStore(int ISBN, int numBooks){
         ResultSet res;
 
         try  {
@@ -99,7 +98,6 @@ public class Owner extends Users {
                 System.out.println("\nWhat is the publisher's 7 digit bank account number for payment purposes?");
                 int bNum = input.nextInt();
 
-
                 statement.executeUpdate("insert into publisher values ('" + pub_name + "'," + pub_id + ",'" + email + "','" + address+"', '"  + phoneNum + "'," + bNum + ");");
                 statement.executeUpdate("insert into book_data values ('" + title + "','" + author + "', '" + genre + "');");
                 statement.executeUpdate("insert into book values ('" + newIsbn + "', '" + title + "'," + numPages + "," + price + ", '" + pub_id + "'," + 0 + "," + pub_fee + ");" );
@@ -115,14 +113,10 @@ public class Owner extends Users {
         catch (Exception sqle){
             System.out.println("Exception: " + sqle);
         }
-
-
     }
 
-    public void removeBooks(int ISBN, int numBooks){ //will only remove books from the inventory, therefore it can't be sold
-
+    public void removeBooksFromBookStore(int ISBN, int numBooks){ //will only remove books from the inventory, therefore it can't be sold
         try{
-
             result = statement.executeQuery("select book_quantity from inventory where ISBN = '" + ISBN + "';");
             if(result.next()){
                 if(result.getInt("book_quantity") >= numBooks) {
@@ -143,7 +137,6 @@ public class Owner extends Users {
     }
 
     public void generateReports(){
-
         System.out.println("Which Report would you like to see?");
         System.out.println("Sales by Author, enter 1");
         System.out.println("Sales between date, enter 2");
@@ -213,7 +206,7 @@ public class Owner extends Users {
 
     }
 
-    public void payPublisher (int ISBN, int num_books){
+    public void payPublisher(int ISBN, int num_books){
 
         ResultSet result1;
         double fee;

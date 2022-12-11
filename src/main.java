@@ -68,7 +68,6 @@ public class main {
                     System.out.println("Welcome Customer! \n");
                     Consumer c = new Consumer(statement,connection, username);
                     c.consumerMenu();
-                } else { // owner/manager // if it's a manager we show another menu
                     System.out.println("Welcome Owner! \n");
                     Owner o = new Owner(statement, connection, username);
                     o.ownerMenu();
