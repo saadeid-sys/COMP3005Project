@@ -7,7 +7,7 @@ public class main {
     private final static String user = "postgres";
     private final static String databasePassword = "mot38_Rot";
 
-    public static void createUser() {
+    public static void createNewUser() {
         Scanner input = new Scanner(System.in);
 
         try (Connection connection = DriverManager.getConnection(url, user, databasePassword);
@@ -52,8 +52,8 @@ public class main {
     public static void loginUser(String username, String password){
 
         ResultSet result;
-        String type = null;
-        String cust = "customer";
+        String userType = null;
+        String customer = "customer";
 
         try (Connection connection = DriverManager.getConnection(url, user, databasePassword);
              Statement statement = connection.createStatement();
@@ -62,9 +62,9 @@ public class main {
                 result = statement.executeQuery(
                         "select type_of_user from users where username = ('" + username + "') and password = ('" + password + "')");
                 result.next();
-                type = result.getString("type_of_user");
+                userType = result.getString("type_of_user");
 
-                if(type.equals(cust)){ //if it's a customer we show certain menu
+                if(userType.equals(customer)){ //if it's a customer we show certain menu
                     System.out.println("Welcome Customer! \n");
                     Consumer c = new Consumer(statement,connection, username);
                     c.consumerMenu();
@@ -102,7 +102,7 @@ public class main {
                 loginUser(userName, password);
                 break;
             case 2:
-                createUser();
+                createNewUser();
                 break;
 
         }
