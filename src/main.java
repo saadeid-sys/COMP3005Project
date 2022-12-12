@@ -5,7 +5,7 @@ public class main {
     //Change the url, user, and databasePassword accordingly for it to work on your machine
     private final static String url = "jdbc:postgresql://localhost/COMP 3005 Project";
     private final static String user = "postgres";
-    private final static String databasePassword = "mot38_Rot";
+    private final static String databasePassword = "";
 
     public static void createNewUser() {
         Scanner input = new Scanner(System.in);
